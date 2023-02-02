@@ -20,8 +20,12 @@ public class questionTreeTester
     public QuestionNode treeMaker(Scanner input) 
     {
     	input.nextLine();
-    	overallRoot = new QuestionNode(input.nextLine());
-    	overallRoot.addQues(input, overallRoot);//Paste your QuestionGame constructor code here and return your overall Root once the tree is made.
+    	
+    	overallRoot= new QuestionNode(input.nextLine());
+    	//QuestionNode first=overallRoot;
+    	//first= new QuestionNode();
+    	
+    	overallRoot.addQues(input, overallRoot);
     	return overallRoot;
     }
 }
@@ -35,6 +39,9 @@ class QuestionNode
 	public QuestionNode(String input){
 		data= input;
 	}
+	public QuestionNode() {
+		data="";
+	}
 	
 
 	public void addQues(Scanner input, QuestionNode root) {
@@ -42,15 +49,22 @@ class QuestionNode
 		if(!input.hasNext()) {
 			return;
 		}
-		if(input.next().equals("Q:")) {
-			if(temp==null)
-				temp=new QuestionNode(input.nextLine());
-			else {
-				temp.left=new QuestionNode(input.nextLine());
-				addQues(input, temp.left);
-			}
+		String letter=input.nextLine();
+		System.out.println("temp equals null: "+temp==null);
+		if(temp==null) {
+			//System.out.println();
+			String word=input.nextLine();
+			temp=new QuestionNode(word);
+			addQues(input,temp.left);
 		}
-		else if(input.next().equals("A:")) {
+		System.out.println("the letter got was "+ letter);
+		if(letter.equals("Q:")) {
+			String word=input.nextLine();
+			temp.left=new QuestionNode(word);
+			addQues(input, temp.left);
+			
+		}
+		else if(letter.equals("A:")) {
 			if(temp.left==null)
 				temp.left= new QuestionNode(input.nextLine());
 			else {
@@ -125,5 +139,5 @@ class BinaryTreePrinter {
         os.print(traversePreOrder(overallRoot));
     }
 
-
+	
 }

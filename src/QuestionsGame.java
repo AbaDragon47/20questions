@@ -15,7 +15,7 @@ public class QuestionsGame {
     // Your code here
 	QuestionNode first;
 	public QuestionsGame(String object) {
-		
+		first= new QuestionNode(object);
 	}
 	public QuestionsGame(Scanner input) throws FileNotFoundException{
 		//should add leaves and branches
@@ -39,6 +39,9 @@ public class QuestionsGame {
     	
     	private QuestionNode(String input){
     		data= input;
+    	}
+    	private QuestionNode() {
+    		data="";
     	}
     	
    
