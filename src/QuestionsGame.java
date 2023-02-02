@@ -1,3 +1,7 @@
+import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 // This is a starter file for QuestionsGame.
@@ -13,16 +17,16 @@ public class QuestionsGame {
 	public QuestionsGame(String object) {
 		
 	}
-	public QuestionsGame(Scanner input) {
+	public QuestionsGame(Scanner input) throws FileNotFoundException{
 		//should add leaves and branches
-		QuestionNode temp= first;
-		if(input.next().equals("Q:")) {
-			temp.left=temp.addQues(input.next(), temp.left);
-			//keep going left
-		else
-			
+		//put in here
+		first.addQues(input, first);
+	}
+	public void saveQuestions(PrintStream output) throws FileNotFoundException {
+		if(output==null) {
+			throw new FileNotFoundException("There was no file");
 		}
-		
+		output.print(first.printInOrder(first));
 	}
 	
 
@@ -36,14 +40,41 @@ public class QuestionsGame {
     	private QuestionNode(String input){
     		data= input;
     	}
-    	private QuestionNode addAnswer(String input, QuestionNode root ) {
-    		
-    		
+    	
+   
+    	private void addQues(Scanner input, QuestionNode root) {
+    		QuestionNode temp= first;
+    		if(!input.hasNext()) {
+    			return;
+    		}
+    		if(input.next().equals("Q:")) {
+    			if(temp==null)
+    				temp=new QuestionNode(input.nextLine());
+    			else {
+    				temp.left=new QuestionNode(input.nextLine());
+    				addQues(input, temp.left);
+    			}
+    		}
+    		else if(input.next().equals("A:")) {
+    			if(temp.left==null)
+    				temp.left= new QuestionNode(input.nextLine());
+    			else {
+    				temp.right=new QuestionNode(input.nextLine());
+    			}
+    			addQues(input,temp.right);
+    		}
     	}
-    	public QuestionNode addQues(String input, QuestionNode root) {
-    		root= new QuestionNode(input);
-    		return root;
-    	}
+    	private String printInOrder(QuestionNode root){
+        	String ans="";
+        	if(root ==null)
+        		return "this root is null";
+            ans+=root.left==null? "A:\n"+root.data+"\n": "Q:\n"+root.data+"\n";
+            ans+= printInOrder(root.left);
+            ans+= printInOrder(root.right);
+            return ans;
+        }
+    	
+    	
     	
     }
 }
