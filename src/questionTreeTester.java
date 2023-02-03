@@ -25,9 +25,48 @@ public class questionTreeTester
     	//QuestionNode first=overallRoot;
     	//first= new QuestionNode();
     	
-    	overallRoot.addQues(input, overallRoot);
+    	addQues(input, overallRoot);
     	return overallRoot;
     }
+    public void addQues(Scanner input, QuestionNode root) {
+		QuestionNode temp= root;
+		if(!input.hasNext()) {
+			return;
+			//stop method
+		}
+		String letter=input.nextLine();
+		if(temp==null) {
+			//if first thing
+			String word=input.nextLine();
+			temp=new QuestionNode(word);
+			addQues(input,temp.left);
+		}
+		if(letter.equals("Q:")) {
+			String word=input.nextLine();
+			if(temp.left!=null) {
+				temp.right= new QuestionNode(word);
+				addQues(input,temp.right);
+			}
+				
+			else {
+				temp.left=new QuestionNode(word);
+				addQues(input, temp.left);
+			}
+
+		}
+		else if(letter.equals("A:")) {
+			if(temp.left==null) {
+				temp.left= new QuestionNode(input.nextLine());
+				addQues(input,temp);
+			}
+				
+			else {
+				temp.right=new QuestionNode(input.nextLine());
+				addQues(input, overallRoot);
+			}
+			
+		}
+	}
 }
 class QuestionNode
 {
@@ -44,35 +83,6 @@ class QuestionNode
 	}
 	
 
-	public void addQues(Scanner input, QuestionNode root) {
-		QuestionNode temp= root;
-		if(!input.hasNext()) {
-			return;
-		}
-		String letter=input.nextLine();
-		System.out.println("temp equals null: "+temp==null);
-		if(temp==null) {
-			//System.out.println();
-			String word=input.nextLine();
-			temp=new QuestionNode(word);
-			addQues(input,temp.left);
-		}
-		System.out.println("the letter got was "+ letter);
-		if(letter.equals("Q:")) {
-			String word=input.nextLine();
-			temp.left=new QuestionNode(word);
-			addQues(input, temp.left);
-			
-		}
-		else if(letter.equals("A:")) {
-			if(temp.left==null)
-				temp.left= new QuestionNode(input.nextLine());
-			else {
-				temp.right=new QuestionNode(input.nextLine());
-			}
-			addQues(input,temp.right);
-		}
-	}
 	private String printInOrder(QuestionNode root){
     	String ans="";
     	if(root ==null)
