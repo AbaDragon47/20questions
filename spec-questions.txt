@@ -11,12 +11,12 @@ mouse
 A:
 spider
 Q:
-Does it have wheels?
-A:
-bicycle
-Q:
 Is it nice?
 A:
 TA
+Q:
+Do you wear it?
+A:
+shoes
 A:
 teacher

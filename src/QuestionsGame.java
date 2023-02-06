@@ -20,7 +20,13 @@ public class QuestionsGame {
 	public QuestionsGame(Scanner input) throws FileNotFoundException{
 		//should add leaves and branches
 		//put in here
-		first.addQues(input, first);
+		input.nextLine();
+    	
+    	first= new QuestionNode(input.nextLine());
+    	//QuestionNode first=overallRoot;
+    	//first= new QuestionNode();
+    	
+    	addQues(input, first);
 	}
 	public void saveQuestions(PrintStream output) throws FileNotFoundException {
 		if(output==null) {
@@ -28,8 +34,78 @@ public class QuestionsGame {
 		}
 		output.print(first.printInOrder(first));
 	}
+	public void addQues(Scanner input, QuestionNode root) {
+		QuestionNode temp= root;
+		if(!input.hasNext()) {
+			return;
+			//stop method
+		}
+		String letter=input.nextLine();
+		if(temp==null) {
+			//if first thing
+			String word=input.nextLine();
+			temp=new QuestionNode(word);
+			addQues(input,temp.left);
+		}
+		if(letter.equals("Q:")) {
+			String word=input.nextLine();
+			if(temp.left!=null) {
+				temp.right= new QuestionNode(word);
+				addQues(input,temp.right);
+			}
+				
+			else {
+				temp.left=new QuestionNode(word);
+				addQues(input, temp.left);
+			}
+
+		}
+		else if(letter.equals("A:")) {
+			if(temp.left==null) {
+				temp.left= new QuestionNode(input.nextLine());
+				addQues(input,temp);
+			}
+				
+			else {
+				temp.right=new QuestionNode(input.nextLine());
+				addQues(input, first);
+			}
+			
+		}
+	}
 	
 
+	public void play() {
+		QuestionNode tempGame=first;
+		Scanner game= new Scanner(System.in);
+		System.out.println("Hi! Lets play!");
+		
+		while(tempGame.left!=null&& tempGame.right!=null) {
+			System.out.println(tempGame.data);
+			String ans=game.nextLine();
+			if(ans.toUpperCase().charAt(0)=='N') 
+				tempGame=tempGame.right;
+			
+			else if(ans.toUpperCase().charAt(0)=='M'||ans.toUpperCase().charAt(0)=='Y')
+				tempGame=tempGame.left;
+			else
+				System.out.println("Sorry not a valid answer, please choose [Y]es or [N]o");
+			
+		}
+		System.out.println("I have an answer! "+tempGame.data+"\n\nIs this right?");
+		if(game.nextLine().toUpperCase().charAt(0)=='N') {
+			tempGame.right= new QuestionNode(tempGame.data);
+			System.out.println("What were you thinking of?");
+			tempGame.left= new QuestionNode(game.nextLine());
+			System.out.println("Whats a better question to get that answer?");
+			tempGame.data=game.nextLine();
+			System.out.println("Thanks!");
+			
+		}
+		else
+			System.out.println("YAYYYY! You got 2 points. Remember.... ");
+		
+	}
     private static class QuestionNode {
         // Your code here
     	//basic normal node and its left's and right's access throu true and falses
@@ -44,33 +120,11 @@ public class QuestionsGame {
     		data="";
     	}
     	
-   
-    	private void addQues(Scanner input, QuestionNode root) {
-    		QuestionNode temp= first;
-    		if(!input.hasNext()) {
-    			return;
-    		}
-    		if(input.next().equals("Q:")) {
-    			if(temp==null)
-    				temp=new QuestionNode(input.nextLine());
-    			else {
-    				temp.left=new QuestionNode(input.nextLine());
-    				addQues(input, temp.left);
-    			}
-    		}
-    		else if(input.next().equals("A:")) {
-    			if(temp.left==null)
-    				temp.left= new QuestionNode(input.nextLine());
-    			else {
-    				temp.right=new QuestionNode(input.nextLine());
-    			}
-    			addQues(input,temp.right);
-    		}
-    	}
+
     	private String printInOrder(QuestionNode root){
         	String ans="";
         	if(root ==null)
-        		return "this root is null";
+        		return"";
             ans+=root.left==null? "A:\n"+root.data+"\n": "Q:\n"+root.data+"\n";
             ans+= printInOrder(root.left);
             ans+= printInOrder(root.right);
